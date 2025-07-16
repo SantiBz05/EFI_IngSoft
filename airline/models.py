@@ -63,9 +63,9 @@ class Reservation(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2) #precio
     reservation_code = models.CharField(max_length=20, unique=True) #codigo de reserva, unique=True permite que no haya otro codigo igual
 
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE) #vuelo id
-    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE) #pasajero id
-    seat = models.OneToOneField(Seat, on_delete=models.CASCADE) #asiento id
+    flight_id = models.ForeignKey(Flight, on_delete=models.CASCADE) #vuelo id
+    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE) #pasajero id
+    seat_id = models.OneToOneField(Seat, on_delete=models.CASCADE) #asiento id
     
     def __str__(self):
         return f"Reservation {self.reservation_code} for {self.passenger.name}"
@@ -76,8 +76,8 @@ class Ticket(models.Model):
     issue_date = models.DateTimeField(auto_now_add=True) #fecha de emision
     status = models.CharField(max_length=50)  # estado, ej: "activo", "usado", "cancelado"
 
-    reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE) #reserva id
+    reservation_id = models.OneToOneField(Reservation, on_delete=models.CASCADE) #reserva id
     
     def __str__(self):
         return f"Ticket {self.barcode} - {self.status}"
-
+    
