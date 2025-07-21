@@ -1,4 +1,5 @@
 from airline.models import Reservation
+from datetime import datetime
 
 class ReservationRepository:
     """
@@ -9,16 +10,16 @@ class ReservationRepository:
     @staticmethod
     def create(
         status: str,
-        reservation_date: str,
-        price: str,
+        reservation_date: datetime,
+        price: float,
         reservation_code: str,
-        flight_id: str,
-        passenger_id: str,
-        seat_id: float,
+        flight_id: int,
+        passenger_id: int,
+        seat_id: int,
 
     ) -> Reservation:
         return Reservation.objects.create(
-            passenger_id=passenger_id,
+            status=status,
             reservation_date=reservation_date,
             price=price,
             reservation_code=reservation_code,
@@ -35,8 +36,8 @@ class ReservationRepository:
             raise ValueError("El reserva No Existe")
         
     @staticmethod
-    def update(Reservation: Reservation, status: str, reservation_date: str, price: str, reservation_code: str, flight_id: str, passenger_id: str, seat_id: float) -> Reservation:
-        Reservation.pstatus = status
+    def update(Reservation: Reservation, status: str, reservation_date: datetime, price: float, reservation_code: str, flight_id: int, passenger_id: int, seat_id: int) -> Reservation:
+        Reservation.status = status
         Reservation.reservation_date = reservation_date
         Reservation.price = price
         Reservation.reservation_code = reservation_code

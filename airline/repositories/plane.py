@@ -59,5 +59,7 @@ class PlaneRepository:
         """
         Buscar el avion que contenga el model ingresado
         """
-        return  Plane.objects.filter(model__icontains=model)
-        
+        try:
+            return Plane.objects.filter(model__icontains=model)
+        except Plane.DoesNotExist:
+            return None

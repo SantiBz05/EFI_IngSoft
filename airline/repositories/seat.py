@@ -9,7 +9,7 @@ class SeatRepository:
     @staticmethod
     def create(
         number: str,
-        row: str,
+        row: int,
         column: str,
         seat_type: str,
         status: str,
@@ -32,7 +32,7 @@ class SeatRepository:
             raise ValueError("El asientos No Existe")
         
     @staticmethod
-    def update(seat: Seat, number: str, row: str, column: str, seat_type: str, status: str, plane_id: int) -> Seat:
+    def update(seat: Seat, number: str, row: int, column: str, seat_type: str, status: str, plane_id: int) -> Seat:
         seat.number = number
         seat.row = row
         seat.column = column

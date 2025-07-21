@@ -30,6 +30,7 @@ class UserRepository:
         
     @staticmethod
     def update(user: User, username: str, password: str, email: str, role: str) -> User:
+        user
         user.username = username
         user.password = password
         user.email = email

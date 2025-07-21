@@ -1,4 +1,5 @@
 from airline.models import Passenger
+from datetime import date
 
 class PassengerRepository:
     """
@@ -13,7 +14,7 @@ class PassengerRepository:
         document_type: str,
         email: str,
         phone: str,
-        birth_date: str,
+        birth_date: date,
     ) -> Passenger:
         return Passenger.objects.create(
             name=name,
@@ -32,7 +33,7 @@ class PassengerRepository:
             raise ValueError("El Pasajero No Existe")
         
     @staticmethod
-    def update(passenger: Passenger, name: str, document: str, document_type: str, email: str, phone: str, birth_date: str) -> Passenger:
+    def update(passenger: Passenger, name: str, document: str, document_type: str, email: str, phone: str, birth_date: date) -> Passenger:
         passenger.name = name
         passenger.document = document
         passenger.document_type = document_type

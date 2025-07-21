@@ -1,4 +1,6 @@
-from airline.models import Flight
+from airline.models import Flight, Plane, User
+
+from datetime import datetime, timedelta
 
 class FlightRepository:
     """
@@ -10,15 +12,17 @@ class FlightRepository:
     def create(
         origin: str,
         destination: str,
-        departure_date: str,
-        arrival_date: str,
-        duration: str,
+        departure_date: datetime,
+        arrival_date: datetime,
+        duration: timedelta,
         status: str,
         base_price: float,
         plane_id: int,
-        user_id: int,
+        user_id: list[int],
     ) -> Flight:
-        return Flight.objects.create(
+        plane = Plane.objects.get(id=plane_id)
+
+        flight = Flight.objects.create(
             origin=origin,
             destination=destination,
             departure_date=departure_date,
@@ -26,9 +30,12 @@ class FlightRepository:
             duration= duration,
             status= status,
             base_price= base_price,
-            plane_id = plane_id,
-            user_id = user_id,
+            plane_id = plane,
         )
+        users = User.objects.filter(id__in=user_id)
+        flight.user_id.set(users)
+        return flight
+
     
     @staticmethod
     def delete(flight: Flight) -> bool:
@@ -50,7 +57,7 @@ class FlightRepository:
         flight.user_id = user_id
         flight.save()
 
-        return Flight
+        return flight
     
     @staticmethod 
     def get_all() -> list[Flight]:
