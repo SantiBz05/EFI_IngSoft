@@ -1,9 +1,13 @@
+from datetime import datetime
 from airline.models import Ticket
 from airline.repositories.ticket import TicketRepository
+from airline.repositories.reservation import ReservationRepository
 
-from datetime import datetime
 
 class TicketService:
+    """
+    Servicio que actúa como intermediario entre la lógica de negocio y el repositorio de Ticket.
+    """
 
     @staticmethod
     def create(
@@ -12,50 +16,74 @@ class TicketService:
         status: str,
         reservation_id: int,
     ) -> Ticket:
+        """
+        Crea un nuevo ticket utilizando el repositorio.
+        """
+        # Obtener instancia de Reservation
+        reservation = ReservationRepository.get_by_id(reservation_id=reservation_id)
+
         return TicketRepository.create(
             barcode=barcode,
             issue_date=issue_date,
             status=status,
-            reservation_id=reservation_id,
+            reservation=reservation,  
         )
 
     @staticmethod
     def delete(ticket_id: int) -> bool:
+        """
+        Elimina un ticket por su ID, si existe.
+        """
         ticket = TicketRepository.get_by_id(ticket_id=ticket_id)
         if ticket:
             return TicketRepository.delete(ticket=ticket)
         return False
-    
+
     @staticmethod
     def update(
         ticket_id: int,
         barcode: str,
-        issue_date: int,
+        issue_date: datetime,
         status: str,
         reservation_id: int,
     ) -> bool:
-        ticket = TicketRepository.get_by_id(ticket_id=ticket_id)
-        if Ticket:
-            TicketRepository.update(
-                ticket=ticket,
+        """
+        Actualiza los campos de un ticket existente.
+        """
+        ticket = TicketRepository.get_by_id(ticket=ticket_id)
+        if ticket:
+            return TicketRepository.update(
+                ticket_id=ticket,
                 barcode=barcode,
                 issue_date=issue_date,
                 status=status,
                 reservation_id=reservation_id,
             )
+        return False
 
     @staticmethod
     def get_all() -> list[Ticket]:
-        return TicketRepository.get_all() 
-    
+        """
+        Devuelve una lista con todos los tickets.
+        """
+        return TicketRepository.get_all()
+
     @staticmethod
-    def get_by_id(ticket_id: int) -> list[Ticket]:
-        if ticket_id:
-            return TicketRepository.get_by_id(ticket_id=ticket_id)
-        return ValueError("El Ticket No Existe")
-    
+    def get_by_id(ticket_id: int) -> Ticket:
+        """
+        Devuelve un ticket por su ID. Lanza un error si no existe.
+        """
+        ticket = TicketRepository.get_by_id(ticket_id=ticket_id)
+        if ticket:
+            return ticket
+        raise ValueError("El Ticket no existe")
+
     @staticmethod
     def search_by_barcode(barcode: str) -> list[Ticket]:
-        if barcode:
-            return TicketRepository.search_by_barcode(barcode=barcode)
-        return ValueError("El Ticket No Existe")
+        """
+        Busca tickets por su código de barras. Lanza un error si no se encuentra.
+        """
+        tickets = TicketRepository.search_by_barcode(barcode=barcode)
+        if tickets:
+            return tickets
+        raise ValueError("No se encontraron tickets con ese código de barras")

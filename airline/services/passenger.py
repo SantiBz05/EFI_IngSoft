@@ -1,7 +1,7 @@
+from datetime import date
 from airline.models import Passenger
 from airline.repositories.passenger import PassengerRepository
 
-from datetime import date
 
 class PassengerService:
 

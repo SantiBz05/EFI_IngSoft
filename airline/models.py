@@ -27,8 +27,8 @@ class Flight(models.Model): #clase vuelo
     status = models.CharField(max_length=50) #estado
     base_price = models.DecimalField(max_digits=10, decimal_places=2) #precio base
 
-    plane_id = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
-    user_id = models.ManyToManyField(User)
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
+    user = models.ManyToManyField(User)
 
     def __str__(self):
         return f"{self.origin} → {self.destination} ({self.departure_date.date()})"
@@ -52,7 +52,7 @@ class Seat(models.Model):
     seat_type = models.CharField(max_length=50)  #tipo de asiento, ej: "economico", "business"
     status = models.CharField(max_length=50)     #estadp ej: "disponible", "ocupado"
 
-    plane_id = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
     
     def __str__(self):
         return f"{self.row}{self.column} (Plane ID: {self.plane_id.id})"
@@ -63,9 +63,9 @@ class Reservation(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2) #precio
     reservation_code = models.CharField(max_length=20, unique=True) #codigo de reserva, unique=True permite que no haya otro codigo igual
 
-    flight_id = models.ForeignKey(Flight, on_delete=models.CASCADE) #vuelo id
-    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE) #pasajero id
-    seat_id = models.OneToOneField(Seat, on_delete=models.CASCADE) #asiento id
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE) #vuelo id
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE) #pasajero id
+    seat = models.OneToOneField(Seat, on_delete=models.CASCADE) #asiento id
     
     def __str__(self):
         return f"Reservation {self.reservation_code} for {self.passenger.name}"
@@ -76,7 +76,7 @@ class Ticket(models.Model):
     issue_date = models.DateTimeField(auto_now_add=True) #fecha de emision
     status = models.CharField(max_length=50)  # estado, ej: "activo", "usado", "cancelado"
 
-    reservation_id = models.OneToOneField(Reservation, on_delete=models.CASCADE) #reserva id
+    reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE) #reserva id
     
     def __str__(self):
         return f"Ticket {self.barcode} - {self.status}"
