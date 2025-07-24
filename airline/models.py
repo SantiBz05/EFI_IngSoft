@@ -27,8 +27,8 @@ class Flight(models.Model): #clase vuelo
     status = models.CharField(max_length=50) #estado
     base_price = models.DecimalField(max_digits=10, decimal_places=2) #precio base
 
-    plane_id = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
-    user_id = models.ManyToManyField(User)
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
+    user = models.ManyToManyField(User)
 
     def __str__(self):
         return f"{self.origin} → {self.destination} ({self.departure_date.date()})"
@@ -52,7 +52,7 @@ class Seat(models.Model):
     seat_type = models.CharField(max_length=50)  #tipo de asiento, ej: "economico", "business"
     status = models.CharField(max_length=50)     #estadp ej: "disponible", "ocupado"
 
-    plane_id = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE) #avion id
     
     def __str__(self):
         return f"{self.row}{self.column} (Plane ID: {self.plane_id.id})"
@@ -80,4 +80,4 @@ class Ticket(models.Model):
     
     def __str__(self):
         return f"Ticket {self.barcode} - {self.status}"
-
+    
